@@ -3,6 +3,7 @@ package com.test.gototechtest.service;
 import com.test.gototechtest.dto.GameDTO;
 import com.test.gototechtest.dto.GameStateDTO;
 import com.test.gototechtest.dto.PlayerDTO;
+import com.test.gototechtest.dto.ShoeStatisticDTO;
 import com.test.gototechtest.persistance.dao.CardDAO;
 import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.dao.PlayerDAO;
@@ -67,6 +68,13 @@ public class GameService {
         }
 
         return null;
+    }
+
+    public ShoeStatisticDTO calculateDeckStatistics(GameDTO gameDTO) {
+        Optional<Game> game = gameDAO.findById(gameDTO.getId());
+        Shoe shoe = game.get().getShoe();
+
+        return new ShoeStatisticDTO(shoe);
     }
 
     public GameDTO addDeckToShoe(GameDTO gameDTO) {

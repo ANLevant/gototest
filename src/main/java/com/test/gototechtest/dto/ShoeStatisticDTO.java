@@ -13,17 +13,22 @@ public class ShoeStatisticDTO {
 
     public ShoeStatisticDTO(Shoe shoeEntity) {
         id = shoeEntity.getId();
+        Card[] cardsBuffer = new Card[shoeEntity.getCards().size()];
 
-        for (Card card : (Card[]) shoeEntity.getCards().toArray()) {
+        for (Card card : shoeEntity.getCards().toArray(cardsBuffer)) {
             switch (card.getCardSuite()) {
                 case HEARTS:
                     numberOfHeartsRemaining++;
+                    break;
                 case SPADES:
                     numberOfSpadesRemaining++;
+                    break;
                 case CLUBS:
                     numberOfClubsRemaining++;
+                    break;
                 case DIAMONDS:
                     numberOfDiamondsRemaining++;
+                    break;
 
             }
         }

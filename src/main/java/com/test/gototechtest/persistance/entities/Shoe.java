@@ -38,13 +38,11 @@ public class Shoe {
 
     public void shuffle()
     {
-        Card[] cardsArray = (Card[])cards.toArray();
         Collections.shuffle(cards);
 
         Stack<Card> shuffledStack = new Stack<>();
 
-        for(Card card : cardsArray)
-        {
+        for (Card card : cards) {
             shuffledStack.push(card);
         }
 

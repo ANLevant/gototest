@@ -14,8 +14,7 @@ public class Game {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
-    @Transient
+    @OneToMany(mappedBy = "game")
     private List<Player> players;
 
     @OneToOne

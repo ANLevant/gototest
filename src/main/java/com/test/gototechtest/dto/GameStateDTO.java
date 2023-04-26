@@ -19,16 +19,7 @@ public class GameStateDTO {
             playerStateDTOS.add(new PlayerStateDTO(player));
         }
 
-        quickSort(playerStateDTOS, 0, playerStateDTOS.size());
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        quickSort(playerStateDTOS, 0, playerStateDTOS.size() - 1);
     }
 
     public void quickSort(List<PlayerStateDTO> arr, int begin, int end) {
@@ -61,5 +52,20 @@ public class GameStateDTO {
         return i + 1;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<PlayerStateDTO> getPlayerStateDTOS() {
+        return playerStateDTOS;
+    }
+
+    public void setPlayerStateDTOS(List<PlayerStateDTO> playerStateDTOS) {
+        this.playerStateDTOS = playerStateDTOS;
+    }
 }
 

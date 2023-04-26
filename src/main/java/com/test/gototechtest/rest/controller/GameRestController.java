@@ -59,7 +59,7 @@ public class GameRestController {
         return playerService.createPLayer(gameDTO);
     }
 
-    @GetMapping("{id}/player/{playerId}/deal")
+    @PutMapping("{id}/player/{playerId}")
     public PlayerDTO dealCardsToPlayer(@PathVariable Long id, @PathVariable Long playerId, @RequestParam Long amoutOfCardsToDeal) {
         return gameService.dealCardsToPlayer(id, playerId, amoutOfCardsToDeal);
     }

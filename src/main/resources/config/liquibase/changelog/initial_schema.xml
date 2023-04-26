@@ -1,0 +1,121 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="1" author="Alejandro">
+
+        <!--Create the Shoe table -->
+        <createTable tableName="shoe">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number_of_decks" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        incrementBy="50"
+                        maxValue="1000"
+                        minValue="1"
+                        ordered="true"
+                        sequenceName="shoe_seq"
+                        startValue="50"/>
+
+        <!--Create the Game table -->
+        <createTable tableName="game">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="shoe_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="shoe_id"
+                                 baseTableName="game"
+                                 constraintName="fk_game_shoe"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shoe"/>
+
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        incrementBy="50"
+                        maxValue="1000"
+                        minValue="1"
+                        ordered="true"
+                        sequenceName="game_seq"
+                        startValue="50"/>
+
+        <!--Create the Player table -->
+        <createTable tableName="player">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="game_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="game_id"
+                                 baseTableName="player"
+                                 constraintName="fk_game_player"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="game"/>
+
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        incrementBy="50"
+                        maxValue="1000"
+                        minValue="1"
+                        ordered="true"
+                        sequenceName="player_seq"
+                        startValue="50"/>
+
+        <!--Create the Card table -->
+        <createTable tableName="card">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="card_suite" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="card_value" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shoe_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="shoe_id"
+                                 baseTableName="card"
+                                 constraintName="fk_card_shoe"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shoe"/>
+
+        <addForeignKeyConstraint baseColumnNames="player_id"
+                                 baseTableName="card"
+                                 constraintName="fk_card_player"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="player"/>
+
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        incrementBy="50"
+                        maxValue="1000"
+                        minValue="1"
+                        ordered="true"
+                        sequenceName="card_seq"
+                        startValue="50"/>
+
+    </changeSet>
+</databaseChangeLog>

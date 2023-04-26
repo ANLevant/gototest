@@ -1,6 +1,7 @@
 package com.test.gototechtest.service;
 
 import com.test.gototechtest.dto.GameDTO;
+import com.test.gototechtest.dto.GameStateDTO;
 import com.test.gototechtest.dto.PlayerDTO;
 import com.test.gototechtest.persistance.dao.CardDAO;
 import com.test.gototechtest.persistance.dao.GameDAO;
@@ -54,9 +55,18 @@ public class GameService {
         gameDAO.delete(game);
     }
 
-    public GameDTO getGame(GameDTO gameDTO) {
+    public GameStateDTO getGameState(GameDTO gameDTO) {
         Optional<Game> game = gameDAO.findById(gameDTO.getId());
-        return new GameDTO(game.get());
+
+        if (game.isPresent()) {
+            Game gameFound = game.get();
+
+            GameStateDTO gameStateDTO = new GameStateDTO(gameFound);
+
+            return gameStateDTO;
+        }
+
+        return null;
     }
 
     public GameDTO addDeckToShoe(GameDTO gameDTO) {

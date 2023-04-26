@@ -2,6 +2,7 @@ package com.test.gototechtest.rest.controller;
 
 import com.test.gototechtest.dto.CardDTO;
 import com.test.gototechtest.dto.GameDTO;
+import com.test.gototechtest.dto.GameStateDTO;
 import com.test.gototechtest.dto.PlayerDTO;
 import com.test.gototechtest.service.GameService;
 import com.test.gototechtest.service.PlayerService;
@@ -26,10 +27,10 @@ public class GameRestController {
     }
 
     @GetMapping("/{id}")
-    public GameDTO getGame(@PathVariable Long id) {
+    public GameStateDTO getGame(@PathVariable Long id) {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setId(id);
-        return gameService.getGame(gameDTO);
+        return gameService.getGameState(gameDTO);
     }
 
     @PutMapping("/{id}")

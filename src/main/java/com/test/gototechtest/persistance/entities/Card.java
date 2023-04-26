@@ -1,7 +1,7 @@
 package com.test.gototechtest.persistance.entities;
 
-import com.test.gototechtest.enumeration.CardValue;
 import com.test.gototechtest.enumeration.CardSuite;
+import com.test.gototechtest.enumeration.CardValue;
 import jakarta.persistence.*;
 
 @Entity
@@ -23,7 +23,7 @@ public class Card {
     private Player player;
 
     @ManyToOne
-    @JoinColumn(name="shoe_id", nullable=false)
+    @JoinColumn(name = "shoe_id")
     private Shoe shoe;
 
     public Card() {

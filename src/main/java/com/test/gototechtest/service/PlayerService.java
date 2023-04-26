@@ -1,16 +1,12 @@
 package com.test.gototechtest.service;
 
+import com.test.gototechtest.dto.CardDTO;
 import com.test.gototechtest.dto.GameDTO;
 import com.test.gototechtest.dto.PlayerDTO;
-import com.test.gototechtest.persistance.dao.CardDAO;
-import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.dao.PlayerDAO;
-import com.test.gototechtest.persistance.dao.ShoeDAO;
 import com.test.gototechtest.persistance.entities.Card;
 import com.test.gototechtest.persistance.entities.Game;
 import com.test.gototechtest.persistance.entities.Player;
-import com.test.gototechtest.persistance.entities.Shoe;
-import com.test.gototechtest.util.DeckFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +29,25 @@ public class PlayerService {
         return new PlayerDTO(playerDAO.save(player));
     }
 
-    public void deletePlayer(PlayerDTO playerDTO)
-    {
+    public void deletePlayer(PlayerDTO playerDTO) {
         Player player = new Player(playerDTO);
         playerDAO.delete(player);
     }
 
-    public PlayerDTO getPlayer(PlayerDTO playerDTO)
-    {
+    public PlayerDTO getPlayer(PlayerDTO playerDTO) {
         Optional<Player> player = playerDAO.findById(playerDTO.getId());
         return new PlayerDTO(player.get());
+    }
+
+    public List<CardDTO> getPlayerCards(PlayerDTO playerDTO) {
+        Optional<Player> player = playerDAO.findById(playerDTO.getId());
+
+        List<CardDTO> playerHandDTO = new ArrayList<>();
+
+        for (Card card : player.get().getCards()) {
+            playerHandDTO.add(new CardDTO(card));
+        }
+
+        return playerHandDTO;
     }
 }

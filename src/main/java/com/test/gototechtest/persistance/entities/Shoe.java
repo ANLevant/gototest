@@ -25,7 +25,7 @@ public class Shoe {
 
     public void addDeck(List<Card> deck)
     {
-        Stack cardsAsStack = getCards();
+        Stack<Card> cardsAsStack = getCards();
 
         for(Card card : deck)
         {
@@ -41,7 +41,7 @@ public class Shoe {
         Card[] cardsArray = (Card[])cards.toArray();
         Collections.shuffle(cards);
 
-        Stack shuffledStack = new Stack<>();
+        Stack<Card> shuffledStack = new Stack<>();
 
         for(Card card : cardsArray)
         {
@@ -62,10 +62,11 @@ public class Shoe {
     public Stack<Card> getCards() {
         Stack<Card> cardsAsStack = new Stack<>();
 
-        for(Card card : cards)
-        {
+        for (Card card : cards) {
             cardsAsStack.push(card);
         }
+
+        cards = cardsAsStack;
 
         return cardsAsStack;
     }

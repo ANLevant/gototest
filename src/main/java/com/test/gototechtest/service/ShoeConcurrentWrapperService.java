@@ -107,7 +107,7 @@ public class ShoeConcurrentWrapperService {
     public List<CardDTO> drawCards(int cardsToDraw, GameDTO gameDTO) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
         if (gameContainerMap.containsKey(gameDTO.getId())) {
             Pair<Shoe, Semaphore> syncedShoed = gameContainerMap.get(gameDTO.getId());
-            if (syncedShoed.getValue0().getCards().size() > cardsToDraw) {
+            if (syncedShoed.getValue0().getCards().size() >= cardsToDraw) {
                 syncedShoed.getValue1().acquire();
                 List<CardDTO> cardsDrawn = new ArrayList<>();
 

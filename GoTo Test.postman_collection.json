@@ -1,0 +1,191 @@
+{
+  "info": {
+    "_postman_id": "0b04a2be-4f0e-4ced-bc74-1619252a0baf",
+    "name": "GoTo Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "811595"
+  },
+  "item": [
+    {
+      "name": "CreateGame",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetGameState",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetShoeStatistics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1/deck",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1",
+            "deck"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetPlayerHand",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/player/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "player",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AddPlayerToGame",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1/player",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1",
+            "player"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DealCardToPlayer",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1/player/1?cardsToDeal=110",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1",
+            "player",
+            "1"
+          ],
+          "query": [
+            {
+              "key": "cardsToDeal",
+              "value": "110"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteGame",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeletePlayer",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/player/1",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "player",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AddDeckToGame",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1/deck",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1",
+            "deck"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

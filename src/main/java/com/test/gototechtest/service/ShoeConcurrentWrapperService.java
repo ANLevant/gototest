@@ -60,9 +60,9 @@ public class ShoeConcurrentWrapperService {
         Optional<Shoe> shoe = shoeDAO.findById(shoeDTO.getId());
         if (shoe.isPresent()) {
             gameContainerMap.put(gameDTO.getId(), new Pair<Shoe, Semaphore>(shoe.get(), new Semaphore(1)));
+        } else {
+            throw new EntityDoesntExistException("Shoe doesn't exist!");
         }
-
-        throw new EntityDoesntExistException("Shoe doesn't exist!");
     }
 
     public void removeShoeGameWrapper(ShoeDTO shoeDTO, GameDTO gameDTO) throws EntityDoesntExistException {
@@ -70,9 +70,9 @@ public class ShoeConcurrentWrapperService {
         if (shoe.isPresent() && gameContainerMap.containsKey(gameDTO.getId())) {
             gameContainerMap.remove(gameDTO.getId());
             shoeDAO.delete(shoe.get());
+        } else {
+            throw new EntityDoesntExistException("Shoe doesn't exist!");
         }
-
-        throw new EntityDoesntExistException("Shoe doesn't exist!");
     }
 
     public ShoeDTO createDatabaseShoe() {

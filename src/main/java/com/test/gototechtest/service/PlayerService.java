@@ -82,4 +82,25 @@ public class PlayerService {
         throw new EntityDoesntExistException("Player doesn't exist!");
 
     }
+
+    public void addCardsToHandThread(List<CardDTO> cardsToAdd, PlayerDTO playerDTO) throws EntityDoesntExistException {
+        Optional<Player> player = playerDAO.findById(playerDTO.getId());
+
+        if (player.isPresent()) {
+            for (CardDTO cardDTO : cardsToAdd) {
+                Optional<Card> card = cardDAO.findById(cardDTO.getId());
+
+                if (card.isPresent()) {
+                    card.get().setPlayer(player.get());
+                }
+
+                cardDAO.save(card.get());
+            }
+
+            return;
+        }
+
+        throw new EntityDoesntExistException("Player doesn't exist!");
+
+    }
 }

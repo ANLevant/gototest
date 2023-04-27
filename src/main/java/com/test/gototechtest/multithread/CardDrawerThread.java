@@ -26,7 +26,7 @@ public class CardDrawerThread extends Thread {
     public void run() {
         while (true) {
             try {
-                callbackGameService.dealCardsToPlayer(gameDTOParam, playerDTOParam, cardsToDealParam);
+                callbackGameService.dealCardsToPlayerThread(gameDTOParam, playerDTOParam, cardsToDealParam);
                 sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

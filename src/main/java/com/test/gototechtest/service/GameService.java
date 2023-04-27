@@ -7,7 +7,9 @@ import com.test.gototechtest.multithread.CardDrawerThread;
 import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.entities.Game;
 import com.test.gototechtest.persistance.entities.Shoe;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,9 @@ public class GameService {
 
     @Autowired
     private PlayerService playerService;
+
+    @Resource(name = "simpleTaskExecutor")
+    private TaskExecutor taskExecutor;
 
     public GameDTO createGame() throws EntityDoesntExistException {
         Game game = new Game();
@@ -74,8 +79,12 @@ public class GameService {
     }
 
     public void fireCardDrawThread(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
-        CardDrawerThread thread = new CardDrawerThread(this, gameDTO, playerDTO, cardsToDeal);
-        thread.start();
+        taskExecutor.execute(new CardDrawerThread(this, gameDTO, playerDTO, cardsToDeal));
+    }
+
+    public void dealCardsToPlayerThread(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
+        List<CardDTO> drawnCards = shoeConcurrentWrapperService.drawCards(cardsToDeal, gameDTO);
+        playerService.addCardsToHandThread(drawnCards, playerDTO);
     }
 
     public PlayerDTO dealCardsToPlayer(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {

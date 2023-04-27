@@ -2,6 +2,7 @@ package com.test.gototechtest.persistance.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Shoe {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     @OneToMany(mappedBy = "shoe")
+    @NotAudited
     private List<Card> cards;
     @Column(name = "number_of_decks")
     private int numberOfDecks;

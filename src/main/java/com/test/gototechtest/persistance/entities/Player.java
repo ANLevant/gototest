@@ -3,6 +3,7 @@ package com.test.gototechtest.persistance.entities;
 import com.test.gototechtest.dto.PlayerDTO;
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Player {
     private Long id;
 
     @OneToMany(mappedBy = "player")
+    @NotAudited
     private List<Card> cards;
 
     @ManyToOne

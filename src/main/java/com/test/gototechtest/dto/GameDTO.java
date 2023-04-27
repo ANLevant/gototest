@@ -20,7 +20,7 @@ public class GameDTO {
         shoeId = gameEntity.getShoe().getId();
         playerIdInGame = new ArrayList<>();
 
-        for(Player player : gameEntity.getPlayers()) {
+        for (Player player : gameEntity.getPlayers()) {
             playerIdInGame.add(player.getId());
         }
     }
@@ -40,5 +40,13 @@ public class GameDTO {
 
     public void setPlayerIdInGame(List<Long> playerIdInGame) {
         this.playerIdInGame = playerIdInGame;
+    }
+
+    public Long getShoeId() {
+        return shoeId;
+    }
+
+    public void setShoeId(Long shoeId) {
+        this.shoeId = shoeId;
     }
 }

@@ -3,6 +3,8 @@ package com.test.gototechtest.service;
 import com.test.gototechtest.dto.CardDTO;
 import com.test.gototechtest.dto.GameDTO;
 import com.test.gototechtest.dto.PlayerDTO;
+import com.test.gototechtest.error.EntityDoesntExistException;
+import com.test.gototechtest.persistance.dao.CardDAO;
 import com.test.gototechtest.persistance.dao.PlayerDAO;
 import com.test.gototechtest.persistance.entities.Card;
 import com.test.gototechtest.persistance.entities.Game;
@@ -20,8 +22,10 @@ public class PlayerService {
     @Autowired
     private PlayerDAO playerDAO;
 
-    public PlayerDTO createPLayer(GameDTO gameDTO)
-    {
+    @Autowired
+    private CardDAO cardDAO;
+
+    public PlayerDTO createPLayer(GameDTO gameDTO) {
         Player player = new Player();
 
         player.setGame(new Game(gameDTO));
@@ -34,20 +38,49 @@ public class PlayerService {
         playerDAO.delete(player);
     }
 
-    public PlayerDTO getPlayer(PlayerDTO playerDTO) {
+    public PlayerDTO getPlayer(PlayerDTO playerDTO) throws EntityDoesntExistException {
         Optional<Player> player = playerDAO.findById(playerDTO.getId());
-        return new PlayerDTO(player.get());
+        if (player.isPresent()) {
+            return new PlayerDTO(player.get());
+        }
+        throw new EntityDoesntExistException("Player doesn't exist!");
     }
 
-    public List<CardDTO> getPlayerCards(PlayerDTO playerDTO) {
+    public List<CardDTO> getPlayerCards(PlayerDTO playerDTO) throws EntityDoesntExistException {
         Optional<Player> player = playerDAO.findById(playerDTO.getId());
 
-        List<CardDTO> playerHandDTO = new ArrayList<>();
+        if (player.isPresent()) {
+            List<CardDTO> playerHandDTO = new ArrayList<>();
 
-        for (Card card : player.get().getCards()) {
-            playerHandDTO.add(new CardDTO(card));
+            for (Card card : player.get().getCards()) {
+                playerHandDTO.add(new CardDTO(card));
+            }
+
+            return playerHandDTO;
         }
 
-        return playerHandDTO;
+        throw new EntityDoesntExistException("Shoe doesn't exist!");
+    }
+
+    public PlayerDTO addCardsToHand(List<CardDTO> cardsToAdd, PlayerDTO playerDTO) throws EntityDoesntExistException {
+        Optional<Player> player = playerDAO.findById(playerDTO.getId());
+
+        if (player.isPresent()) {
+            for (CardDTO cardDTO : cardsToAdd) {
+                Optional<Card> card = cardDAO.findById(cardDTO.getId());
+
+                if (card.isPresent()) {
+                    card.get().setPlayer(player.get());
+                }
+
+                cardDAO.save(card.get());
+                player.get().getCards().add(card.get());
+            }
+
+            return new PlayerDTO(player.get());
+        }
+
+        throw new EntityDoesntExistException("Player doesn't exist!");
+
     }
 }

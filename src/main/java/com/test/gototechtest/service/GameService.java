@@ -1,22 +1,13 @@
 package com.test.gototechtest.service;
 
-import com.test.gototechtest.dto.GameDTO;
-import com.test.gototechtest.dto.GameStateDTO;
-import com.test.gototechtest.dto.PlayerDTO;
-import com.test.gototechtest.dto.ShoeStatisticDTO;
-import com.test.gototechtest.persistance.dao.CardDAO;
+import com.test.gototechtest.dto.*;
+import com.test.gototechtest.error.EntityDoesntExistException;
 import com.test.gototechtest.persistance.dao.GameDAO;
-import com.test.gototechtest.persistance.dao.PlayerDAO;
-import com.test.gototechtest.persistance.dao.ShoeDAO;
-import com.test.gototechtest.persistance.entities.Card;
 import com.test.gototechtest.persistance.entities.Game;
-import com.test.gototechtest.persistance.entities.Player;
 import com.test.gototechtest.persistance.entities.Shoe;
-import com.test.gototechtest.util.DeckFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,38 +16,37 @@ public class GameService {
 
     @Autowired
     private GameDAO gameDAO;
+    @Autowired
+    private ShoeConcurrentWrapperService shoeConcurrentWrapperService;
 
     @Autowired
-    private ShoeDAO shoeDAO;
+    private PlayerService playerService;
 
-    @Autowired
-    private CardDAO cardDAO;
-
-    @Autowired
-    private PlayerDAO playerDAO;
-
-    @Autowired
-    private DeckFactory deckFactory;
-
-    public GameDTO createGame() {
+    public GameDTO createGame() throws EntityDoesntExistException {
         Game game = new Game();
-        Shoe shoe = new Shoe();
 
-        shoe = shoeDAO.save(shoe);
+        ShoeDTO createdShoe = shoeConcurrentWrapperService.createDatabaseShoe();
 
-        addDeckToShoe(shoe);
-
+        Shoe shoe = createdShoe.toEntity();
         game.setShoe(shoe);
 
-        return new GameDTO(gameDAO.save(game));
+        GameDTO gameDTO = new GameDTO(gameDAO.save(game));
+
+        shoeConcurrentWrapperService.createShoeGameWrapper(createdShoe, gameDTO);
+
+        return gameDTO;
     }
 
-    public void deleteGame(GameDTO gameDTO) {
+    public void deleteGame(GameDTO gameDTO) throws EntityDoesntExistException {
         Game game = new Game(gameDTO);
         gameDAO.delete(game);
+
+        ShoeDTO gameShoeDTO = shoeConcurrentWrapperService.getShoeDTO(gameDTO.getShoeId());
+
+        shoeConcurrentWrapperService.removeShoeGameWrapper(gameShoeDTO, gameDTO);
     }
 
-    public GameStateDTO getGameState(GameDTO gameDTO) {
+    public GameStateDTO getGameState(GameDTO gameDTO) throws EntityDoesntExistException {
         Optional<Game> game = gameDAO.findById(gameDTO.getId());
 
         if (game.isPresent()) {
@@ -67,57 +57,24 @@ public class GameService {
             return gameStateDTO;
         }
 
-        return null;
+        throw new EntityDoesntExistException("Game doesn't exist!");
     }
 
-    public ShoeStatisticDTO calculateDeckStatistics(GameDTO gameDTO) {
+    public ShoeStatisticDTO calculateDeckStatistics(GameDTO gameDTO) throws EntityDoesntExistException {
         Optional<Game> game = gameDAO.findById(gameDTO.getId());
-        Shoe shoe = game.get().getShoe();
+        if (game.isPresent()) {
+            Shoe shoe = game.get().getShoe();
 
-        return new ShoeStatisticDTO(shoe);
-    }
-
-    public GameDTO addDeckToShoe(GameDTO gameDTO) {
-        Optional<Game> game = gameDAO.findById(gameDTO.getId());
-        Shoe shoe = game.get().getShoe();
-
-        addDeckToShoe(shoe);
-
-        return new GameDTO();
-    }
-
-    public PlayerDTO dealCardsToPlayer(Long id, Long playerId, Long amoutOfCardsToDeal) {
-        Optional<Game> game = gameDAO.findById(id);
-        Shoe shoe = game.get().getShoe();
-        shoe.shuffle();
-
-        Optional<Player> player = playerDAO.findById(playerId);
-
-        for (int i = 0; i < amoutOfCardsToDeal; i++) {
-            Card card = shoe.getCards().pop();
-            card.setPlayer(player.get());
-
-            card.setShoe(null);
-
-            cardDAO.save(card);
+            return new ShoeStatisticDTO(shoe);
         }
 
-        player = playerDAO.findById(playerId);
-
-        return new PlayerDTO(player.get());
+        throw new EntityDoesntExistException("Game doesn't exist!");
     }
 
-    private void addDeckToShoe(Shoe shoe) {
-        List<Card> cards = deckFactory.getDeck();
-        List<Card> cardsWithIds = new ArrayList<>();
-
-        for (Card card : cards) {
-            card.setShoe(shoe);
-            cardsWithIds.add(cardDAO.save(card));
-
-            cardDAO.save(card);
-        }
-
-        shoe.addDeck(cardsWithIds);
+    public PlayerDTO dealCardsToPlayer(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException {
+        List<CardDTO> drawnCards = shoeConcurrentWrapperService.drawCards(cardsToDeal, gameDTO);
+        return playerService.addCardsToHand(drawnCards, playerDTO);
     }
+
+
 }

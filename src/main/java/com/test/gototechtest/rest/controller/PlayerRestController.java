@@ -2,6 +2,7 @@ package com.test.gototechtest.rest.controller;
 
 import com.test.gototechtest.dto.CardDTO;
 import com.test.gototechtest.dto.PlayerDTO;
+import com.test.gototechtest.error.EntityDoesntExistException;
 import com.test.gototechtest.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class PlayerRestController {
     private PlayerService playerService;
 
     @GetMapping("/{id}")
-    public PlayerDTO getPlayer(@PathVariable Long id) {
+    public PlayerDTO getPlayer(@PathVariable Long id) throws EntityDoesntExistException {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setId(id);
 
@@ -31,7 +32,7 @@ public class PlayerRestController {
     }
 
     @GetMapping("/{id}/cards")
-    public List<CardDTO> getPlayerCards(@PathVariable Long id) {
+    public List<CardDTO> getPlayerCards(@PathVariable Long id) throws EntityDoesntExistException {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setId(id);
 

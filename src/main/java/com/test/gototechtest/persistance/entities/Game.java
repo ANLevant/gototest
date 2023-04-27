@@ -18,7 +18,7 @@ public class Game {
     private List<Player> players;
 
     @OneToOne
-    @JoinColumn(name="shoe_id", nullable=false)
+    @JoinColumn(name = "shoe_id")
     private Shoe shoe;
 
     public Game()

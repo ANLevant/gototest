@@ -3,9 +3,11 @@ package com.test.gototechtest.persistance.entities;
 import com.test.gototechtest.enumeration.CardSuite;
 import com.test.gototechtest.enumeration.CardValue;
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "card")
+@Audited
 public class Card {
 
     @Id

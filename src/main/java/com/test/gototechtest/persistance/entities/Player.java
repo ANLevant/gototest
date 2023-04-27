@@ -2,12 +2,14 @@ package com.test.gototechtest.persistance.entities;
 
 import com.test.gototechtest.dto.PlayerDTO;
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "player")
+@Audited
 public class Player {
 
     @Id

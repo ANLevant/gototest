@@ -1,6 +1,7 @@
 package com.test.gototechtest.persistance.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Stack;
 
 @Entity
 @Table(name = "shoe")
+@Audited
 public class Shoe {
 
     @Id

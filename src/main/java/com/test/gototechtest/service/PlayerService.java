@@ -74,7 +74,6 @@ public class PlayerService {
                 }
 
                 cardDAO.save(card.get());
-                player.get().getCards().add(card.get());
             }
 
             return new PlayerDTO(player.get());

@@ -5,11 +5,15 @@ import com.test.gototechtest.dto.GameStateDTO;
 import com.test.gototechtest.dto.PlayerDTO;
 import com.test.gototechtest.dto.ShoeStatisticDTO;
 import com.test.gototechtest.error.EntityDoesntExistException;
+import com.test.gototechtest.error.NotEnoughCardsInShoeExistException;
 import com.test.gototechtest.service.GameService;
 import com.test.gototechtest.service.PlayerService;
 import com.test.gototechtest.service.ShoeConcurrentWrapperService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("game")
@@ -46,7 +50,7 @@ public class GameRestController {
     }
 
     @PutMapping("/{id}/deck")
-    public void addDeckToShoe(@PathVariable Long id) throws EntityDoesntExistException {
+    public void addDeckToShoe(@PathVariable Long id) throws EntityDoesntExistException, InterruptedException {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setId(id);
 
@@ -70,7 +74,7 @@ public class GameRestController {
     }
 
     @PutMapping("{id}/player/{playerId}")
-    public PlayerDTO dealCardsToPlayer(@PathVariable Long id, @PathVariable Long playerId, @RequestParam int cardsToDeal) throws InterruptedException, EntityDoesntExistException {
+    public PlayerDTO dealCardsToPlayer(@PathVariable Long id, @PathVariable Long playerId, @RequestParam int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setId(id);
 
@@ -78,5 +82,11 @@ public class GameRestController {
         playerDTO.setId(playerId);
 
         return gameService.dealCardsToPlayer(gameDTO, playerDTO, cardsToDeal);
+    }
+
+    @ExceptionHandler({EntityDoesntExistException.class, NotEnoughCardsInShoeExistException.class})
+    public void handleException(HttpServletResponse res, Exception ex) throws IOException {
+        ex.printStackTrace();
+        res.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
     }
 }

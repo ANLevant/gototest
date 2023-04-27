@@ -4,6 +4,7 @@ import com.test.gototechtest.dto.CardDTO;
 import com.test.gototechtest.dto.GameDTO;
 import com.test.gototechtest.dto.ShoeDTO;
 import com.test.gototechtest.error.EntityDoesntExistException;
+import com.test.gototechtest.error.NotEnoughCardsInShoeExistException;
 import com.test.gototechtest.persistance.dao.CardDAO;
 import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.dao.ShoeDAO;
@@ -84,20 +85,26 @@ public class ShoeConcurrentWrapperService {
         return new ShoeDTO(shoe);
     }
 
-    public GameDTO addDeckToShoe(GameDTO gameDTO) throws EntityDoesntExistException {
+    public GameDTO addDeckToShoe(GameDTO gameDTO) throws EntityDoesntExistException, InterruptedException {
         Optional<Game> game = gameDAO.findById(gameDTO.getId());
-        if (game.isPresent()) {
-            Shoe shoe = game.get().getShoe();
+        if (game.isPresent() && gameContainerMap.containsKey(gameDTO.getId())) {
+            Pair<Shoe, Semaphore> syncedShoes = gameContainerMap.get(gameDTO.getId());
+            syncedShoes.getValue1().acquire();
 
-            addDeckToShoe(shoe);
+            addDeckToShoe(syncedShoes.getValue0());
 
-            return new GameDTO();
+            gameContainerMap.remove(gameDTO.getId());
+            gameContainerMap.put(gameDTO.getId(), syncedShoes);
+
+            syncedShoes.getValue1().release();
+
+            return new GameDTO(game.get());
         }
 
         throw new EntityDoesntExistException("Game doesn't exist!");
     }
 
-    public List<CardDTO> drawCards(int cardsToDraw, GameDTO gameDTO) throws InterruptedException, EntityDoesntExistException {
+    public List<CardDTO> drawCards(int cardsToDraw, GameDTO gameDTO) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
         if (gameContainerMap.containsKey(gameDTO.getId())) {
             Pair<Shoe, Semaphore> syncedShoed = gameContainerMap.get(gameDTO.getId());
             if (syncedShoed.getValue0().getCards().size() > cardsToDraw) {
@@ -112,7 +119,10 @@ public class ShoeConcurrentWrapperService {
                     cardsDrawn.add(new CardDTO(cardDAO.save(card)));
                 }
 
+                syncedShoed.getValue1().release();
                 return cardsDrawn;
+            } else {
+                throw new NotEnoughCardsInShoeExistException("Not enough Cards in Shoe!");
             }
         }
         throw new EntityDoesntExistException("Shoe doesn't exist!");

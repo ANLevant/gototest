@@ -2,6 +2,7 @@ package com.test.gototechtest.service;
 
 import com.test.gototechtest.dto.*;
 import com.test.gototechtest.error.EntityDoesntExistException;
+import com.test.gototechtest.error.NotEnoughCardsInShoeExistException;
 import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.entities.Game;
 import com.test.gototechtest.persistance.entities.Shoe;
@@ -71,7 +72,7 @@ public class GameService {
         throw new EntityDoesntExistException("Game doesn't exist!");
     }
 
-    public PlayerDTO dealCardsToPlayer(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException {
+    public PlayerDTO dealCardsToPlayer(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
         List<CardDTO> drawnCards = shoeConcurrentWrapperService.drawCards(cardsToDeal, gameDTO);
         return playerService.addCardsToHand(drawnCards, playerDTO);
     }

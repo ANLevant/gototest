@@ -20,7 +20,9 @@ public class CardDTO {
         this.cardValue = card.getCardValue();
         this.cardSuite = card.getCardSuite();
         this.id = card.getId();
-        shoeId = card.getShoe().getId();
+        if (card.getPlayer() != null) {
+            shoeId = card.getShoe().getId();
+        }
 
         if (card.getPlayer() != null) {
 

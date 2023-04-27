@@ -7,24 +7,6 @@
   },
   "item": [
     {
-      "name": "CreateGame",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/game",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "game"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "GetGameState",
       "request": {
         "method": "GET",
@@ -83,6 +65,24 @@
       "response": []
     },
     {
+      "name": "CreateGame",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "AddPlayerToGame",
       "request": {
         "method": "PUT",
@@ -108,7 +108,7 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "localhost:8080/game/1/player/1?cardsToDeal=110",
+          "raw": "localhost:8080/game/1/player/1?cardsToDeal=2",
           "host": [
             "localhost"
           ],
@@ -122,7 +122,35 @@
           "query": [
             {
               "key": "cardsToDeal",
-              "value": "110"
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "RegisterCardsDrawThreadForPlayer",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/game/1/player/1/thread?cardsToDeal=2",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "game",
+            "1",
+            "player",
+            "1",
+            "thread"
+          ],
+          "query": [
+            {
+              "key": "cardsToDeal",
+              "value": "2"
             }
           ]
         }

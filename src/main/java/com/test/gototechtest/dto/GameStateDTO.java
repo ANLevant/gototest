@@ -22,7 +22,23 @@ public class GameStateDTO {
         quickSort(playerStateDTOS, 0, playerStateDTOS.size() - 1);
     }
 
-    public void quickSort(List<PlayerStateDTO> arr, int begin, int end) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<PlayerStateDTO> getPlayerStateDTOS() {
+        return playerStateDTOS;
+    }
+
+    public void setPlayerStateDTOS(List<PlayerStateDTO> playerStateDTOS) {
+        this.playerStateDTOS = playerStateDTOS;
+    }
+
+    private void quickSort(List<PlayerStateDTO> arr, int begin, int end) {
         if (begin < end) {
             int partitionIndex = partition(arr, begin, end);
 
@@ -50,22 +66,6 @@ public class GameStateDTO {
         arr.set(end, swapTemp);
 
         return i + 1;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<PlayerStateDTO> getPlayerStateDTOS() {
-        return playerStateDTOS;
-    }
-
-    public void setPlayerStateDTOS(List<PlayerStateDTO> playerStateDTOS) {
-        this.playerStateDTOS = playerStateDTOS;
     }
 }
 

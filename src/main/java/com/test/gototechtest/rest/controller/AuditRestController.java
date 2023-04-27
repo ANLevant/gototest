@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -104,6 +105,39 @@ public class AuditRestController {
             auditLogDTOList.add(auditLogDTO);
         }
 
+        quickSort(auditLogDTOList, 0, auditLogDTOList.size() - 1);
+
         return auditLogDTOList;
+    }
+
+
+    private void quickSort(List<AuditLogDTO> arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private int partition(List<AuditLogDTO> arr, int begin, int end) {
+        Date pivot = arr.get(end).getRevisionDate();
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr.get(j).getRevisionDate().before(pivot)) {
+                i++;
+
+                AuditLogDTO swapTemp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, swapTemp);
+            }
+        }
+
+        AuditLogDTO swapTemp = arr.get(i + 1);
+        arr.set(i + 1, arr.get(end));
+        arr.set(end, swapTemp);
+
+        return i + 1;
     }
 }

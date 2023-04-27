@@ -7,6 +7,24 @@
   },
   "item": [
     {
+      "name": "GetAuditLog",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080/audit",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "audit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "GetGameState",
       "request": {
         "method": "GET",

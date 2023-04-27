@@ -84,6 +84,17 @@ public class GameRestController {
         return gameService.dealCardsToPlayer(gameDTO, playerDTO, cardsToDeal);
     }
 
+    @PutMapping("{id}/player/{playerId}/thread")
+    public void fireCardDrawThread(@PathVariable Long id, @PathVariable Long playerId, @RequestParam int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setId(id);
+
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setId(playerId);
+
+        gameService.fireCardDrawThread(gameDTO, playerDTO, cardsToDeal);
+    }
+
     @ExceptionHandler({EntityDoesntExistException.class, NotEnoughCardsInShoeExistException.class})
     public void handleException(HttpServletResponse res, Exception ex) throws IOException {
         ex.printStackTrace();

@@ -3,6 +3,7 @@ package com.test.gototechtest.service;
 import com.test.gototechtest.dto.*;
 import com.test.gototechtest.error.EntityDoesntExistException;
 import com.test.gototechtest.error.NotEnoughCardsInShoeExistException;
+import com.test.gototechtest.multithread.CardDrawerThread;
 import com.test.gototechtest.persistance.dao.GameDAO;
 import com.test.gototechtest.persistance.entities.Game;
 import com.test.gototechtest.persistance.entities.Shoe;
@@ -70,6 +71,11 @@ public class GameService {
         }
 
         throw new EntityDoesntExistException("Game doesn't exist!");
+    }
+
+    public void fireCardDrawThread(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
+        CardDrawerThread thread = new CardDrawerThread(this, gameDTO, playerDTO, cardsToDeal);
+        thread.start();
     }
 
     public PlayerDTO dealCardsToPlayer(GameDTO gameDTO, PlayerDTO playerDTO, int cardsToDeal) throws InterruptedException, EntityDoesntExistException, NotEnoughCardsInShoeExistException {
